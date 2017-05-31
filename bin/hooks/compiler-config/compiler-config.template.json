@@ -1,0 +1,12 @@
+{
+  "profile": false,
+  "verbose": true,
+  "notifications": true,
+  "plugins": [],
+  "globals": {},
+  "dll": {
+    "enabled": true,
+    "ignore": []
+  },
+  "environment": []
+}

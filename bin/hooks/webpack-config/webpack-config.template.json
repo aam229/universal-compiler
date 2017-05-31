@@ -1,0 +1,15 @@
+{
+  "entry": {
+    "main": []
+  },
+  "output": {},
+  "resolve": {
+    "modules": [ "node_modules" ],
+    "extensions": [ ".js" ],
+    "alias": {}
+  },
+  "module": {
+    "rules": []
+  },
+  "plugins": []
+}
