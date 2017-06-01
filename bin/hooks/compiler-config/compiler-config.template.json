@@ -8,5 +8,9 @@
     "enabled": true,
     "ignore": []
   },
+  "sourceMap": {
+    "server": true,
+    "client": false
+  },
   "environment": []
 }

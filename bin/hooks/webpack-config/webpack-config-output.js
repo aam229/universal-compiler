@@ -36,15 +36,22 @@ register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
 
 // Source maps
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
-  config.webpack.devtool = 'cheap-module-eval-source-map';
+  if (config.compiler.sourceMap.client) {
+    config.webpack.devtool = 'cheap-module-eval-source-map';
+  }
 }, { position: positions.BEFORE, environments: [ environments.DEVELOPMENT, environments.CLIENT ] });
-register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
-  config.webpack.devtool = 'source-map';
-}, { position: positions.BEFORE, environments: [ environments.DEVELOPMENT, environments.SERVER ] });
 
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
-  config.webpack.devtool = 'source-map';
+  if (config.compiler.sourceMap.client) {
+    config.webpack.devtool = 'source-map';
+  }
 }, { position: positions.BEFORE, environments: [ environments.PRODUCTION, environments.CLIENT ] });
+
+register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+  if (config.compiler.sourceMap.server) {
+    config.webpack.devtool = 'source-map';
+  }
+}, { position: positions.BEFORE, environments: [ environments.DEVELOPMENT, environments.SERVER ] });
 
 // Uglify
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {

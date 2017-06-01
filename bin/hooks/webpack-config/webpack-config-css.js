@@ -21,6 +21,14 @@ register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUIL
   return config;
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
+register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE ], (config) => {
+  config.webpack.module.rules.push({
+    test: /\.css(\?v=\d+\.\d+\.\d+)?$/,
+    loader: 'ignore-loader'
+  });
+  return config;
+}, { position: positions.BEFORE, environments: environments.CLIENT });
+
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD ], (config) => {
   config.webpack.plugins.push(new ExtractTextPlugin({
     filename: 'client-dll.css',

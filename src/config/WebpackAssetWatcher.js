@@ -6,8 +6,7 @@ const MAX_WAIT = 30 * 1000;
 const INTERVAL = 100;
 
 class Watcher {
-  constructor(staticPath, p) {
-    this.staticPath = staticPath;
+  constructor(p) {
     this.path = p;
   }
 
@@ -37,9 +36,9 @@ class Watcher {
     const config = JSON.parse(fs.readFileSync(this.path));
     let publicPath = config.publicPath;
     if (!publicPath.startsWith('http')) {
-      publicPath = `/${path.relative(this.staticPath, path.resolve(publicPath))}`;
-      if (!publicPath.endsWith('/')) {
-        publicPath = `${publicPath}/`;
+      publicPath = path.resolve(publicPath);
+      if (!publicPath.endsWith(path.sep)) {
+        publicPath = `${publicPath}${path.sep}`;
       }
     }
     console.log(chalk.green(`Loaded assets from ${this.path}`));
@@ -51,10 +50,10 @@ class Watcher {
 }
 
 export default class ConfigWatcher {
-  constructor(staticPath, ...paths) {
+  constructor(...paths) {
     this.watchers = paths
       .filter(p => !!p)
-      .map(p => new Watcher(staticPath, p));
+      .map(p => new Watcher(p));
   }
 
   load() {
