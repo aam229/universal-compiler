@@ -36,7 +36,7 @@ register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
 
 // Source maps
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
-  config.webpack.devtool = 'source-map'; // 'cheap-module-eval-source-map';
+  config.webpack.devtool = 'cheap-module-eval-source-map';
 }, { position: positions.BEFORE, environments: [ environments.DEVELOPMENT, environments.CLIENT ] });
 register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
   config.webpack.devtool = 'source-map';
