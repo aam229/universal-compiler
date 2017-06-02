@@ -104,10 +104,19 @@ function getPluginConfig(pluginName, pluginConfigPath) {
     console.log(chalk.red(`The plugin ${pluginName}'s configuration is invalid: No hooks file defined`));
     return null;
   }
+  if (!config.name) {
+    console.log(chalk.red(`The plugin ${pluginName}'s configuration is invalid: No name defined`));
+    return null;
+  }
+  if (config.dependencies && !(config.dependencies instanceof Array)) {
+    console.log(chalk.red(`The plugin ${pluginName}'s configuration is invalid: Dependencies should be undefined or an array`));
+    return null;
+  }
   const pluginConfig = {
-    name: pluginName,
+    name: config.name,
     path: pluginPath,
-    hooks: {}
+    hooks: {},
+    dependencies: config.dependencies || [],
   };
   if (typeof config.hooks === 'object') {
     pluginConfig.hooks.client = getHookPaths(pluginPath, config.hooks.client);
@@ -130,6 +139,36 @@ function getPluginConfig(pluginName, pluginConfigPath) {
   return pluginConfig;
 }
 
+function checkPluginDependencies(name, plugins) {
+  const plugin = plugins.get(name);
+  if (!plugin || !plugin.isValid) {
+    return false;
+  }
+  if (plugin.isProcessed) {
+    return plugin.isValid;
+  }
+  if (plugin.isProcessing) {
+    console.log(`There is a circular dependency on plugin ${name}`);
+    return false;
+  }
+  plugin.isProcessing = true;
+  const isValid = plugin.config.dependencies.every((dependency) => {
+    if (!plugins.has(dependency)) {
+      console.log(`The dependency ${dependency} for plugin ${name} is missing`);
+      return false;
+    }
+    if (!checkPluginDependencies(dependency, plugins)) {
+      console.log(`The dependency ${dependency} for plugin ${name} is invalid`);
+      return false;
+    }
+    return true;
+  });
+  plugin.isValid = isValid;
+  plugin.isProcessed = true;
+  plugin.isProcessing = false;
+  return isValid;
+}
+
 function configurePlugins(plugins) {
   if (!plugins) {
     throw new Error('The .ucrc must include a plugins property');
@@ -140,7 +179,7 @@ function configurePlugins(plugins) {
   if (plugins.some(plugin => typeof (plugin) !== 'string')) {
     throw new Error('The .ucrc plugins array values should be strings');
   }
-  return plugins
+  const pluginsConfig = plugins
     .map((pluginName) => {
       const pluginPath = getPluginConfigPath(pluginName);
       if (!pluginPath) {
@@ -149,6 +188,11 @@ function configurePlugins(plugins) {
       return getPluginConfig(pluginName, pluginPath);
     })
     .filter(pluginConfig => pluginConfig !== null);
+
+  const isProcessed = false;
+  const isValid = true;
+  const pluginsMap = pluginsConfig.reduce((s, config) => s.set(config.name, { config, isProcessed, isValid }), new Map());
+  return pluginsConfig.filter(pluginConfig => checkPluginDependencies(pluginConfig.name, pluginsMap));
 }
 
 export function requireCompilerHooks(plugins) {
