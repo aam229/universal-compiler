@@ -22,3 +22,10 @@ register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
     path.relative(config.compiler.rootPath, config.compiler.clientOutputPath)
   ));
 }, { position: positions.BEFORE, environments: environments.CLIENT });
+
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
+  config.webpack.plugins.push(new AssetFilesPlugin(
+    path.resolve(config.compiler.serverOutputPath, 'client-assets.json'),
+    `http://${config.compiler.buildServer.host}:${config.compiler.buildServer.port}/`
+  ));
+}, { position: positions.BEFORE, environments: environments.CLIENT });

@@ -42,14 +42,14 @@ register([ hooks.WEBPACK_CONFIG_DLL_BUILD ], (config) => {
 }, { position: positions.BEFORE, environments: environments.SERVER });
 
 // Application Build
-register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.webpack.plugins.push(new webpack.DllReferencePlugin({
     context: '.',
     manifest: path.resolve(config.compiler.tempOutputPath, 'client-dll-manifest.json')
   }));
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
-register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.webpack.plugins.push(new webpack.DllReferencePlugin({
     context: '.',
     name: './server-dll',

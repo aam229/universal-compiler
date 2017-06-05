@@ -7,7 +7,7 @@ import {
   register
 } from '../../../lib/hooks';
 
-register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE, hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.compiler.plugins.forEach((plugin) => {
     config.webpack.entry.main.push(...plugin.hooks.client);
   });
@@ -15,7 +15,7 @@ register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE, hooks.WEBPACK_CONFIG_APPLICATION_BU
   return config;
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
-register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_DLL_ANALYZE, hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.compiler.plugins.forEach((plugin) => {
     config.webpack.entry.main.push(...plugin.hooks.server);
   });
@@ -33,7 +33,7 @@ register([ hooks.WEBPACK_CONFIG_DLL_BUILD ], (config) => {
   return config;
 }, { position: positions.BEFORE, environments: environments.SERVER });
 
-register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.webpack.entry.main.unshift(path.resolve(__dirname, '../../../lib/server-source-maps'));
   return config;
 }, { position: positions.BEFORE, environments: environments.SERVER });

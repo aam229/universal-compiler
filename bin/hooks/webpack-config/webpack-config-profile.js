@@ -31,7 +31,7 @@ register([ hooks.WEBPACK_CONFIG_DLL_BUILD ], (config) => {
   return config;
 }, { position: positions.BEFORE, environments: environments.SERVER });
 
-register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   if (config.compiler.profile) {
     config.webpack.profile = true;
     config.webpack.plugins.push(new StatsPlugin(path.join(
@@ -42,7 +42,7 @@ register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
   return config;
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
-register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   if (config.compiler.profile) {
     config.webpack.profile = true;
     config.webpack.plugins.push(new StatsPlugin(path.join(

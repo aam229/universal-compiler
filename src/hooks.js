@@ -6,7 +6,8 @@ export const hooks = {
   WEBPACK_CONFIG_DLL_ANALYZE: 'dll_analyze',
   WEBPACK_CONFIG_DLL_BUILD: 'dll_build',
   WEBPACK_CONFIG_APPLICATION_BUILD: 'application_build',
-  WEBPACK_CONFIG: [ 'dll_analyze', 'dll_build', 'application_build' ],
+  WEBPACK_CONFIG_APPLICATION_BUILD_SERVER: 'application_build_server',
+  WEBPACK_CONFIG: [ 'dll_analyze', 'dll_build', 'application_build', 'application_build_server' ],
 
   RENDER: 'render_client',
 

@@ -3,9 +3,9 @@ import path from 'path';
 import chalk from 'chalk';
 
 function configureJSEnvironment(serverOrClient) {
+  const isServer = process.argv.indexOf('server') !== -1;
+  const isClient = process.argv.indexOf('client') !== -1;
   if (!serverOrClient) {
-    const isServer = process.argv.indexOf('server') !== -1;
-    const isClient = process.argv.indexOf('client') !== -1;
     if (!isServer && !isClient) {
       throw new Error('The command arguments should include a target (server or client)');
     } else if (isServer && isClient) {
@@ -16,6 +16,9 @@ function configureJSEnvironment(serverOrClient) {
       process.env.JS_ENV = 'client';
     }
   } else {
+    if (isServer || isClient) {
+      console.log(chalk.orange.bold('The build server can only build the client. The build js environment specified in the arguments will be ignored'));
+    }
     process.env.JS_ENV = serverOrClient;
   }
 }

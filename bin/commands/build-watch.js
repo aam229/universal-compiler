@@ -30,12 +30,15 @@ const compiler = webpack(config.webpack);
 compiler.plugin('compilation', () => {
   console.log(chalk.green.bold(`Building ${buildType} for ${process.env.JS_ENV} (${process.env.NODE_ENV})`));
 });
+compiler.plugin('emit', (compilation, callback) => {
+  console.log(`Current time: ${chalk.white.bold(new Date())}`);
+  callback();
+});
 compiler.watch({}, (err, stats) => {
   if (err) {
     console.error(err);
     return;
   }
-  console.log(`Current time: ${chalk.white.bold(new Date())}`);
   console.log(stats.toString({
     hash: true,
     version: true,

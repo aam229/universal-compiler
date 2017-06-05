@@ -13,7 +13,7 @@ register(hooks.WEBPACK_CONFIG, (config) => {
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
 // Extract CSS for client side compilation
-register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_DLL_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.webpack.module.rules.push({
     test: /\.css$/,
     loader: ExtractTextPlugin.extract('css-loader')
@@ -37,7 +37,7 @@ register([ hooks.WEBPACK_CONFIG_DLL_BUILD ], (config) => {
   return config;
 }, { position: positions.BEFORE, environments: environments.CLIENT });
 
-register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD ], (config) => {
+register([ hooks.WEBPACK_CONFIG_APPLICATION_BUILD, hooks.WEBPACK_CONFIG_APPLICATION_BUILD_SERVER ], (config) => {
   config.webpack.plugins.push(new ExtractTextPlugin({
     filename: 'client.css',
     allChunks: true
